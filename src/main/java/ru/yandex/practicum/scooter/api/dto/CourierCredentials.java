@@ -1,15 +1,15 @@
-package ru.yandex.practicum.scooter.api;
+package ru.yandex.practicum.scooter.api.dto;
 
-public class CourierLogin {
+public class CourierCredentials {
     private String login;
     private String password;
 
-    public CourierLogin(String login, String password) {
+    public CourierCredentials(String login, String password) {
         this.login = login;
         this.password = password;
     }
 
-    public CourierLogin() {}
+    public CourierCredentials() {}
 
     public String getLogin() {
         return login;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.scooter.api;
+package ru.yandex.practicum.scooter.api.dto;
 
 import java.util.List;
 
