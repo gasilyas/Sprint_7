@@ -1,4 +1,4 @@
 package ru.yandex.practicum.scooter.api;
 
-public class GetOrderByIdTest {
+public class GetOrderByTrackTest {
 }
