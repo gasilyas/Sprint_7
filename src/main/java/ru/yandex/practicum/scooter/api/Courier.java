@@ -6,11 +6,6 @@ public class Courier {
     private String firstName;
     private Integer id;
 
-    public Courier(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
     public Courier(String login, String password, String firstName) {
         this.login = login;
         this.password = password;
