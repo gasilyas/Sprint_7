@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import ru.yandex.practicum.scooter.api.dto.Courier;
 import ru.yandex.practicum.scooter.api.dto.CourierCredentials;
 import static io.restassured.RestAssured.given;
-import static io.qameta.allure.Allure.step;
 
 public class CourierRestClient extends BaseRestClient{
     private static final String COURIER_V1_PATH = "/api/v1/courier";
@@ -20,14 +19,13 @@ public class CourierRestClient extends BaseRestClient{
                 .post(COURIER_V1_PATH);
     }
 
+    @Step("Удаление курьера по id {courierId} (при наличии)")
     public Response deleteCourier(Integer courierId) {
         var deleteCourierRequest = given().spec(getBaseSpecification());
         String finalDeleteCourierPath;
         if (courierId != null) {
-            step("Удаление курьера по id {courierId}");
             finalDeleteCourierPath = COURIER_V1_PATH + "/" + courierId;
         } else  {
-            step("Удаление курьера без указания id");
             finalDeleteCourierPath = COURIER_V1_PATH + "/";
         }
         return deleteCourierRequest
