@@ -7,7 +7,7 @@ import io.restassured.specification.RequestSpecification;
 public class BaseRestClient {
     protected static final String BASE_URL = "https://qa-scooter.praktikum-services.ru";
 
-    protected RequestSpecification getBaseRequestSpecification() {
+    protected RequestSpecification getBaseSpecification() {
         return new RequestSpecBuilder()
                 .setBaseUri(BASE_URL)
                 .setContentType(ContentType.JSON)
