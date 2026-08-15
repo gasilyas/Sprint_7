@@ -33,7 +33,7 @@ public class CourierRestClient extends BaseRestClient{
                 .delete(finalDeleteCourierPath);
     }
 
-    @Step("Авторизация курьера с логином {courier.login} и паролем {courier.password}")
+    @Step("Авторизация курьера с логином {credentials.login} и паролем {credentials.password}")
     public Response courierLogin(CourierCredentials credentials) {
         return given()
                 .spec(getBaseSpecification())
