@@ -26,14 +26,14 @@ public class CourierRestClient extends BaseRestClient{
         if (courierId != null) {
             finalDeleteCourierPath = COURIER_V1_PATH + "/" + courierId;
         } else  {
-            finalDeleteCourierPath = COURIER_V1_PATH + "/";
+            finalDeleteCourierPath = COURIER_V1_PATH;
         }
         return deleteCourierRequest
                 .when()
                 .delete(finalDeleteCourierPath);
     }
 
-    @Step("Авторизация курьера с логином {credentials.login} и паролем {credentials.password}")
+    @Step("Авторизация курьера с логином {credentials.login}")
     public Response courierLogin(CourierCredentials credentials) {
         return given()
                 .spec(getBaseSpecification())

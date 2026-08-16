@@ -7,9 +7,10 @@ import ru.yandex.practicum.scooter.api.dto.Order;
 import static io.restassured.RestAssured.given;
 
 public class OrderRestClient extends BaseRestClient{
-    private static final String ORDER_V1_PATH = "/api/v1/order";
+    private static final String ORDER_V1_PATH = "/api/v1/orders";
+    private static final String ORDER_TRACK_V1_PATH = "/api/v1/order/track";
 
-    @Step("Создание заказа для клиента {order.firstName} {order.lastName")
+    @Step("Создание заказа для клиента {order.firstName} {order.lastName}")
     public Response createOrder(Order order) {
         return given()
                 .spec(getBaseSpecification())
@@ -19,7 +20,7 @@ public class OrderRestClient extends BaseRestClient{
     }
 
     @Step("Получение общего списка заказов")
-    public Response getOrderList(Order order) {
+    public Response getOrderList() {
         return given()
                 .spec(getBaseSpecification())
                 .when()
@@ -51,6 +52,6 @@ public class OrderRestClient extends BaseRestClient{
         }
         return  getOrderRequest
                 .when()
-                .get(ORDER_V1_PATH + "/track");
+                .get(ORDER_TRACK_V1_PATH);
     }
 }

@@ -21,7 +21,7 @@ public class CreateCourierApiTest {
     private String randomFirstName;
 
     @BeforeEach
-    public void courierSetUp()
+    public void createCourierSetUp()
     {
         courierRestClient = new CourierRestClient();
         Random random = new Random();
@@ -31,15 +31,15 @@ public class CreateCourierApiTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    public void cleanCreateCourierTestData() {
         if (courierId != null) {
             courierRestClient.deleteCourier(courierId);
         }
     }
 
     @Test
-    @DisplayName("Успешное создание курьера со всеми обязательными атрибутами")
-    public void createCourierWithValidDataTest() {
+    @DisplayName("Успешное создание курьера со всеми обязательными атрибутами возвращает ok : true")
+    public void createCourierWithAllDataReturnsSuccessTest() {
         Courier courier = new Courier(randomLogin, randomPassword, randomFirstName);
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(201).body("ok", is(true));
@@ -50,7 +50,7 @@ public class CreateCourierApiTest {
 
     @Test
     @DisplayName("Ошибка (409) создания двух одинаковых курьеров")
-    public void createCourierDuplicateTest() {
+    public void createCourierDuplicateReturnsErrorTest() {
         Courier courier = new Courier(randomLogin, randomPassword, randomFirstName);
 
         courierRestClient.createCourier(courier);
@@ -64,7 +64,7 @@ public class CreateCourierApiTest {
 
     @Test
     @DisplayName("Ошибка (400) создания курьера без логина")
-    public void createCourierWithoutLoginTest() {
+    public void createCourierWithoutLoginReturnsErrorTest() {
         Courier courier = new Courier(null, randomPassword, randomFirstName);
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(400).body("message", containsString("Недостаточно данных для создания учетной записи"));
@@ -72,15 +72,15 @@ public class CreateCourierApiTest {
 
     @Test
     @DisplayName("Ошибка (400) создания курьера без пароля")
-    public void createCourierWithouthPasswordTest() {
+    public void createCourierWithoutPasswordReturnsErrorTest() {
         Courier courier = new Courier(randomLogin, null, randomFirstName);
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(400).body("message", containsString("Недостаточно данных для создания учетной записи"));
     }
 
     @Test
-    @DisplayName("Успешное создание курьера без имени")
-    public void createCourierWithoutFirstNameTest() {
+    @DisplayName("Успешное создание курьера без имени возвращает ok : true")
+    public void createCourierWithoutFirstNameReturnsSuccessTest() {
         Courier courier = new Courier(randomLogin, randomPassword, null);
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(201).body("ok", is(true));
