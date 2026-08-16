@@ -30,8 +30,8 @@ public class AcceptOrderApiTest {
         courierRestClient = new CourierRestClient();
         Random random = new Random();
 
-        wrongCourierId = -random.nextInt(1000) - 1;
-        wrongOrderId = -random.nextInt(1000) - 1;
+        wrongCourierId = Integer.MAX_VALUE - random.nextInt(100000);
+        wrongOrderId = Integer.MAX_VALUE - random.nextInt(100000);
 
         String courierLogin = "sam_bridges_" + random.nextInt(100000);
         String courierPass = "cupid_lulu_" + random.nextInt(10000);

@@ -8,7 +8,6 @@ import static io.restassured.RestAssured.given;
 
 public class OrderRestClient extends BaseRestClient{
     private static final String ORDER_V1_PATH = "/api/v1/orders";
-    private static final String ORDER_TRACK_V1_PATH = "/api/v1/order/track";
 
     @Step("Создание заказа для клиента {order.firstName} {order.lastName}")
     public Response createOrder(Order order) {
@@ -52,6 +51,6 @@ public class OrderRestClient extends BaseRestClient{
         }
         return  getOrderRequest
                 .when()
-                .get(ORDER_TRACK_V1_PATH);
+                .get(ORDER_V1_PATH + "/track");
     }
 }

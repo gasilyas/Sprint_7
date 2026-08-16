@@ -58,7 +58,7 @@ public class GetOrderByTrackTest {
     @DisplayName("Ошибка (404) получения заказа несуществующим номером (track)")
     public void getOrderWithNonExistingTrackNumberReturnsErrorTest() {
         random = new Random();
-        Integer nonExistingTrack = -random.nextInt(5000) - 1;
+        Integer nonExistingTrack = Integer.MAX_VALUE - random.nextInt(100000);
         Response response = orderRestClient.getOrderDetailsByTrackNumber(nonExistingTrack);
         response.then().statusCode(404).body("message", containsString("Заказ не найден"));
     }

@@ -26,7 +26,7 @@ public class DeleteCourierApiTest {
         randomLogin = "sam_bridges_" + random.nextInt(1000);
         randomPassword = "cupid_lulu_" + random.nextInt(1000);
         randomFirstName = "Сэм " + random.nextInt(1000);
-        nonExistentCourierId = -random.nextInt(1000) - 1;
+        nonExistentCourierId = Integer.MAX_VALUE - random.nextInt(100000);
     }
 
     @Test
