@@ -3,6 +3,7 @@ target/
 
 # Папки и файлы настроек среды разработки IntelliJ IDEA
 .idea/
+.allure/
 *.iml
 *.iws
 
