@@ -1,0 +1,64 @@
+<div>POST to https://qa-scooter.praktikum-services.ru/api/v1/orders</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;firstName&quot;: &quot;Иван_203&quot;,
+    &quot;lastName&quot;: &quot;Иванов_224&quot;,
+    &quot;address&quot;: &quot;Москва, ул. Пушкина, д. 16&quot;,
+    &quot;metroStation&quot;: &quot;9&quot;,
+    &quot;phone&quot;: &quot;+79165622817&quot;,
+    &quot;rentTime&quot;: 6,
+    &quot;deliveryDate&quot;: &quot;2026-08-12&quot;,
+    &quot;comment&quot;: &quot;Комментарий_73&quot;,
+    &quot;color&quot;: [
+        &quot;BLACK&quot;
+    ],
+    &quot;id&quot;: null,
+    &quot;courierId&quot;: null,
+    &quot;track&quot;: null,
+    &quot;cancelled&quot;: null,
+    &quot;finished&quot;: null,
+    &quot;inDelivery&quot;: null,
+    &quot;courierFirstName&quot;: null,
+    &quot;createdAt&quot;: null,
+    &quot;updatedAt&quot;: null,
+    &quot;status&quot;: 0
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;https://qa-scooter.praktikum-services.ru/api/v1/orders&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;firstName&quot;: &quot;Иван_203&quot;,
+    &quot;lastName&quot;: &quot;Иванов_224&quot;,
+    &quot;address&quot;: &quot;Москва, ул. Пушкина, д. 16&quot;,
+    &quot;metroStation&quot;: &quot;9&quot;,
+    &quot;phone&quot;: &quot;+79165622817&quot;,
+    &quot;rentTime&quot;: 6,
+    &quot;deliveryDate&quot;: &quot;2026-08-12&quot;,
+    &quot;comment&quot;: &quot;Комментарий_73&quot;,
+    &quot;color&quot;: [
+        &quot;BLACK&quot;
+    ],
+    &quot;id&quot;: null,
+    &quot;courierId&quot;: null,
+    &quot;track&quot;: null,
+    &quot;cancelled&quot;: null,
+    &quot;finished&quot;: null,
+    &quot;inDelivery&quot;: null,
+    &quot;courierFirstName&quot;: null,
+    &quot;createdAt&quot;: null,
+    &quot;updatedAt&quot;: null,
+    &quot;status&quot;: 0
+}&#39;
+</div>
