@@ -18,13 +18,30 @@ public class GetOrderByTrackTest {
     private Integer trackNumber;
     private Random random;
 
+    private String expectedFirstName;
+    private String expectedLastName;
+    private String expectedAddress;
+    private String expectedMetroStation;
+    private String expectedPhone;
+    private String expectedDeliveryDate;
+    private byte expectedRentTime;
+    private String expectedComment;
+
     @BeforeEach
     public void getOrderByTrackSetUp() {
         orderRestClient = new OrderRestClient();
         random = new Random();
 
-        String randomString = "qwerty_" + random.nextInt(1000);
-        Order order = new Order(randomString, randomString, randomString, "1", "111", (byte)1, "2026-11-11", "", List.of());
+        expectedFirstName = "qwerty_" + random.nextInt(1000);
+        expectedLastName = "qwerty_" + random.nextInt(1000);
+        expectedAddress = "qwerty_" + random.nextInt(1000);
+        expectedMetroStation = "1";
+        expectedPhone = "+7999" + (random.nextInt(9000000) + 1000000);
+        expectedDeliveryDate = "2026-11-11";
+        expectedRentTime = (byte)1;
+        expectedComment = "";
+
+        Order order = new Order(expectedFirstName, expectedLastName, expectedAddress, expectedMetroStation, expectedPhone, expectedRentTime, expectedDeliveryDate, expectedComment, List.of());
         Response response = orderRestClient.createOrder(order);
         trackNumber = response.jsonPath().getInt("track");
     }
@@ -38,13 +55,14 @@ public class GetOrderByTrackTest {
 
         Order receivedOrder = response.jsonPath().getObject("order", Order.class);
 
-        assertNotNull(receivedOrder.getFirstName(), "Поле firstName не может быть пустым");
-        assertNotNull(receivedOrder.getLastName(), "Поле lastName не может быть пустым");
-        assertNotNull(receivedOrder.getAddress(), "Поле address не может быть пустым");
-        assertNotNull(receivedOrder.getMetroStation(), "Поле metroStation не может быть пустым");
-        assertNotNull(receivedOrder.getPhone(), "Поле phone не может быть пустым");
-        assertNotNull(receivedOrder.getDeliveryDate(), "Поле deliveryDate не может быть пустым");
-        assertTrue(receivedOrder.getRentTime() > 0, "Срок аренды не может быть меньше 1");
+        assertEquals(expectedFirstName, receivedOrder.getFirstName(), "Имя пользователя не совпадает");
+        assertEquals(expectedLastName, receivedOrder.getLastName(), "Фамилия пользователя не совпадает");
+        assertEquals(expectedAddress, receivedOrder.getAddress(), "Адрес заказа не совпадает");
+        assertEquals(expectedMetroStation, receivedOrder.getMetroStation(), "Станция метро в заказе не совпадает");
+        assertEquals(expectedPhone, receivedOrder.getPhone(), "Номер телефона не совпадает");
+        assertEquals(expectedDeliveryDate, receivedOrder.getDeliveryDate(), "Дата доставки не совпадает");
+        assertEquals(expectedRentTime, receivedOrder.getRentTime(), "Срок аренды не совпадает");
+        assertEquals(expectedComment, receivedOrder.getComment(), "Комментарий не совпадает");
     }
 
     @Test

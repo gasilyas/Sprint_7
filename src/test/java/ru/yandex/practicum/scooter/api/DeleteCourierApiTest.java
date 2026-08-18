@@ -47,12 +47,7 @@ public class DeleteCourierApiTest {
     @DisplayName("Ошибка (400) удаления курьера без id")
     public void deleteCourierWithoutIdReturnsErrorTest() {
         Response response = courierRestClient.deleteCourier(null);
-
-        int statusCode = response.getStatusCode();
-        response.then().statusCode(anyOf(is(400), is(404)));
-        if(statusCode==400) {
-            response.then().body("message", containsString("Недостаточно данных для удаления курьера"));
-        }
+        response.then().statusCode(400).body("message", containsString("Недостаточно данных для удаления курьера"));
     }
 
     @Test

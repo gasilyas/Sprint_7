@@ -101,12 +101,7 @@ public class LoginCourierApiTest {
         CourierCredentials credentials = new CourierCredentials(courier.getLogin(), null);
         Response response = courierRestClient.courierLogin(credentials);
 
-        int statusCode = response.getStatusCode();
-        response.then().statusCode(anyOf(is(400), is(504)));
-
-        if(statusCode==400) {
-            response.then().body("message", containsString("Недостаточно данных для входа"));
-        }
+        response.then().statusCode(400).body("message", containsString("Недостаточно данных для входа"));
 
     }
 

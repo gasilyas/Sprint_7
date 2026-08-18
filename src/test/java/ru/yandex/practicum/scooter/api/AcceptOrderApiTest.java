@@ -65,32 +65,19 @@ public class AcceptOrderApiTest {
         response.then().statusCode(200).body("ok", is(true));
     }
 
-    // Тут тоже не понял, почему 404 вместо 400
     @Test
     @DisplayName("Ошибка (400) принятия заказа с пустым id курьера")
     public void acceptOrderWithoutCourierIdReturnsErrorTest() {
         Response response = orderRestClient.acceptOrderByCourier(orderId, null);
+        response.then().statusCode(400).body("message", containsString("Недостаточно данных для поиска"));
 
-        int statusCode = response.getStatusCode();
-        response.then().statusCode(anyOf(is(400), is(404)));
-
-        if(statusCode==400) {
-            response.then().body("message", containsString("Недостаточно данных для поиска"));
-        }
     }
 
-    // Тут тоже не понял, почему 404 вместо 400
     @Test
     @DisplayName("Ошибка (400) принятия заказа с пустым id заказа")
     public void acceptOrderWithoutOrderIdReturnsErrorTest() {
         Response response = orderRestClient.acceptOrderByCourier(null, courierId);
-
-        int statusCode = response.getStatusCode();
-        response.then().statusCode(anyOf(is(400), is(404)));
-
-        if(statusCode==400) {
-            response.then().body("message", containsString("Недостаточно данных для поиска"));
-        }
+        response.then().statusCode(400).body("message", containsString("Недостаточно данных для поиска"));
     }
 
     @Test
