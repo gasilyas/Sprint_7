@@ -10,6 +10,8 @@ import ru.yandex.practicum.scooter.api.client.OrderRestClient;
 import ru.yandex.practicum.scooter.api.dto.Courier;
 import ru.yandex.practicum.scooter.api.dto.CourierCredentials;
 import ru.yandex.practicum.scooter.api.dto.Order;
+import ru.yandex.practicum.scooter.api.utils.CourierDataGenerator;
+import ru.yandex.practicum.scooter.api.utils.OrderDataGenerator;
 
 import java.util.List;
 import java.util.Random;
@@ -33,17 +35,12 @@ public class AcceptOrderApiTest {
         wrongCourierId = Integer.MAX_VALUE - random.nextInt(100000);
         wrongOrderId = Integer.MAX_VALUE - random.nextInt(100000);
 
-        String courierLogin = "sam_bridges_" + random.nextInt(100000);
-        String courierPass = "cupid_lulu_" + random.nextInt(10000);
-        String courierName = "Сэм " + random.nextInt(1000);
-
-        Courier courier = new Courier(courierLogin, courierPass, courierName);
+        Courier courier = CourierDataGenerator.generateCourier();
         courierRestClient.createCourier(courier);
-        Response loginResponse = courierRestClient.courierLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
-        courierId = loginResponse.then().extract().path("id");
 
-        String orderClientName = "Заказчик_" + random.nextInt(1000);
-        Order order = new Order(orderClientName, orderClientName, orderClientName, "1", "111", (byte)1, "2026-11-11", "123", List.of("BLACK"));
+        courierId = courierRestClient.getCourierIdAfterLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
+
+        Order order = OrderDataGenerator.generateOrderData(List.of("BLACK"));
         Response orderResponse = orderRestClient.createOrder(order);
         int track = orderResponse.then().extract().path("track");
 

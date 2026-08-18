@@ -8,26 +8,20 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.scooter.api.client.CourierRestClient;
 import ru.yandex.practicum.scooter.api.dto.Courier;
 import ru.yandex.practicum.scooter.api.dto.CourierCredentials;
+import ru.yandex.practicum.scooter.api.utils.CourierDataGenerator;
 
 import static org.hamcrest.Matchers.*;
 
-import java.util.Random;
 
 public class CreateCourierApiTest {
     private CourierRestClient courierRestClient;
     private Integer courierId;
-    private String randomLogin;
-    private String randomPassword;
-    private String randomFirstName;
+    private Courier courier;
 
     @BeforeEach
-    public void createCourierSetUp()
-    {
+    public void createCourierSetUp() {
         courierRestClient = new CourierRestClient();
-        Random random = new Random();
-        randomLogin = "sam_bridges_" + random.nextInt(1000);
-        randomPassword = "cupid_lulu_" + random.nextInt(1000);
-        randomFirstName = "Сэм " + random.nextInt(1000);
+        courier = CourierDataGenerator.generateCourier();
     }
 
     @AfterEach
@@ -40,7 +34,7 @@ public class CreateCourierApiTest {
     @Test
     @DisplayName("Успешное создание курьера со всеми обязательными атрибутами возвращает ok : true")
     public void createCourierWithAllDataReturnsSuccessTest() {
-        Courier courier = new Courier(randomLogin, randomPassword, randomFirstName);
+
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(201).body("ok", is(true));
 
@@ -51,21 +45,25 @@ public class CreateCourierApiTest {
     @Test
     @DisplayName("Ошибка (409) создания двух одинаковых курьеров")
     public void createCourierDuplicateReturnsErrorTest() {
-        Courier courier = new Courier(randomLogin, randomPassword, randomFirstName);
 
         courierRestClient.createCourier(courier);
 
-        Response loginResponse = courierRestClient.courierLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
-        courierId = loginResponse.then().extract().path("id");
+        courierId = courierRestClient.getCourierIdAfterLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
 
-        Response createCourierResponse = courierRestClient.createCourier(courier);
+        Courier duplicateCourier = CourierDataGenerator.generateCourier();
+        duplicateCourier.setLogin(courier.getLogin());
+        duplicateCourier.setPassword(courier.getPassword());
+
+        Response createCourierResponse = courierRestClient.createCourier(duplicateCourier);
         createCourierResponse.then().statusCode(409).body("message", containsString("Этот логин уже используется"));
     }
 
     @Test
     @DisplayName("Ошибка (400) создания курьера без логина")
     public void createCourierWithoutLoginReturnsErrorTest() {
-        Courier courier = new Courier(null, randomPassword, randomFirstName);
+
+        courier.setLogin(null);
+
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(400).body("message", containsString("Недостаточно данных для создания учетной записи"));
     }
@@ -73,7 +71,9 @@ public class CreateCourierApiTest {
     @Test
     @DisplayName("Ошибка (400) создания курьера без пароля")
     public void createCourierWithoutPasswordReturnsErrorTest() {
-        Courier courier = new Courier(randomLogin, null, randomFirstName);
+
+        courier.setPassword(null);
+
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(400).body("message", containsString("Недостаточно данных для создания учетной записи"));
     }
@@ -81,7 +81,9 @@ public class CreateCourierApiTest {
     @Test
     @DisplayName("Успешное создание курьера без имени возвращает ok : true")
     public void createCourierWithoutFirstNameReturnsSuccessTest() {
-        Courier courier = new Courier(randomLogin, randomPassword, null);
+
+        courier.setFirstName(null);
+
         Response createCourierResponse = courierRestClient.createCourier(courier);
         createCourierResponse.then().statusCode(201).body("ok", is(true));
 

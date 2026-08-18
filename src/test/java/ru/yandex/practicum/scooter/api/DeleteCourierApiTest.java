@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.scooter.api.client.CourierRestClient;
 import ru.yandex.practicum.scooter.api.dto.Courier;
 import ru.yandex.practicum.scooter.api.dto.CourierCredentials;
+import ru.yandex.practicum.scooter.api.utils.CourierDataGenerator;
 
 import java.util.Random;
 
@@ -14,35 +15,27 @@ import static org.hamcrest.Matchers.*;
 
 public class DeleteCourierApiTest {
     private CourierRestClient courierRestClient;
-    private String randomLogin;
-    private String randomPassword;
-    private String randomFirstName;
     private int nonExistentCourierId;
 
     @BeforeEach
     public void deleteCourierSetUp() {
         courierRestClient = new CourierRestClient();
         Random random = new Random();
-        randomLogin = "sam_bridges_" + random.nextInt(1000);
-        randomPassword = "cupid_lulu_" + random.nextInt(1000);
-        randomFirstName = "Сэм " + random.nextInt(1000);
         nonExistentCourierId = Integer.MAX_VALUE - random.nextInt(100000);
     }
 
     @Test
     @DisplayName("Успешное удаление курьера (200), возвращает ok: true")
     public void deleteCourierByValidIdReturnsSuccessTest() {
-        Courier courier = new Courier(randomLogin, randomPassword, randomFirstName);
+        Courier courier = CourierDataGenerator.generateCourier();
         courierRestClient.createCourier(courier);
 
-        Response loginResponse = courierRestClient.courierLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
-        int id = loginResponse.then().extract().path("id");
+        Integer courierId = courierRestClient.getCourierIdAfterLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
 
-        Response deleteResponse = courierRestClient.deleteCourier(id);
+        Response deleteResponse = courierRestClient.deleteCourier(courierId);
         deleteResponse.then().statusCode(200).body("ok", is(true));
     }
 
-    // Тут тоже не понял, почему 404 вместо 400
     @Test
     @DisplayName("Ошибка (400) удаления курьера без id")
     public void deleteCourierWithoutIdReturnsErrorTest() {

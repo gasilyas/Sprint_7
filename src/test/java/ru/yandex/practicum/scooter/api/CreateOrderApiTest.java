@@ -8,9 +8,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.yandex.practicum.scooter.api.client.OrderRestClient;
 import ru.yandex.practicum.scooter.api.dto.Order;
+import ru.yandex.practicum.scooter.api.utils.OrderDataGenerator;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
@@ -37,18 +37,8 @@ public class CreateOrderApiTest {
     @MethodSource("scooterColorProvider")
     @DisplayName("Создание заказа с разными вводными данными цветов возвращает track != null")
     public void createScooterOrderWithDifferentColorsReturnsSuccessTest(List<String> scooterColors) {
-        Random random = new Random();
-        String firstName = "Иван_" + random.nextInt(1000);
-        String lastName = "Иванов_" + random.nextInt(1000);
-        String address = "Москва, ул. Пушкина, д. " + random.nextInt(100);
-        String metroStation = String.valueOf((random.nextInt(10) + 1));
-        String phone = "+7916" + (random.nextInt(9000000) + 1000000);
-        byte rentTime = (byte) (random.nextInt(7) + 1);
-        String deliveryDate = "2026-08-" + (random.nextInt(18) + 10);
-        String comment = "Комментарий_" + random.nextInt(100);
 
-        Order order = new Order(firstName, lastName, address, metroStation,
-                phone, rentTime, deliveryDate, comment, scooterColors);
+        Order order = OrderDataGenerator.generateOrderData(scooterColors);
 
         Response response = orderRestClient.createOrder(order);
         response.then().statusCode(201).body("track", notNullValue());

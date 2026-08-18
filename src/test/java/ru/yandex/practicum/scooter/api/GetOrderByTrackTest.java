@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.scooter.api.client.OrderRestClient;
 import ru.yandex.practicum.scooter.api.dto.Order;
+import ru.yandex.practicum.scooter.api.utils.OrderDataGenerator;
 
 import java.util.List;
 import java.util.Random;
@@ -16,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GetOrderByTrackTest {
     private OrderRestClient orderRestClient;
     private Integer trackNumber;
-    private Random random;
 
     private String expectedFirstName;
     private String expectedLastName;
@@ -26,22 +26,24 @@ public class GetOrderByTrackTest {
     private String expectedDeliveryDate;
     private byte expectedRentTime;
     private String expectedComment;
+    private List<String> expectedColors;
 
     @BeforeEach
     public void getOrderByTrackSetUp() {
         orderRestClient = new OrderRestClient();
-        random = new Random();
 
-        expectedFirstName = "qwerty_" + random.nextInt(1000);
-        expectedLastName = "qwerty_" + random.nextInt(1000);
-        expectedAddress = "qwerty_" + random.nextInt(1000);
-        expectedMetroStation = "1";
-        expectedPhone = "+7999" + (random.nextInt(9000000) + 1000000);
-        expectedDeliveryDate = "2026-11-11";
-        expectedRentTime = (byte)1;
-        expectedComment = "";
+        Order order = OrderDataGenerator.generateOrderData(List.of());
 
-        Order order = new Order(expectedFirstName, expectedLastName, expectedAddress, expectedMetroStation, expectedPhone, expectedRentTime, expectedDeliveryDate, expectedComment, List.of());
+        expectedFirstName = order.getFirstName();
+        expectedLastName = order.getLastName();
+        expectedAddress = order.getAddress();
+        expectedMetroStation = order.getMetroStation();
+        expectedPhone = order.getPhone();
+        expectedDeliveryDate = order.getDeliveryDate();
+        expectedRentTime = order.getRentTime();
+        expectedComment = order.getComment();
+        expectedColors = order.getColor();
+
         Response response = orderRestClient.createOrder(order);
         trackNumber = response.jsonPath().getInt("track");
     }
@@ -60,9 +62,10 @@ public class GetOrderByTrackTest {
         assertEquals(expectedAddress, receivedOrder.getAddress(), "Адрес заказа не совпадает");
         assertEquals(expectedMetroStation, receivedOrder.getMetroStation(), "Станция метро в заказе не совпадает");
         assertEquals(expectedPhone, receivedOrder.getPhone(), "Номер телефона не совпадает");
-        assertEquals(expectedDeliveryDate, receivedOrder.getDeliveryDate(), "Дата доставки не совпадает");
+        assertTrue(receivedOrder.getDeliveryDate().contains(expectedDeliveryDate), "Дата доставки не содержит ожидаемое значение. Получено:" + receivedOrder.getDeliveryDate());
         assertEquals(expectedRentTime, receivedOrder.getRentTime(), "Срок аренды не совпадает");
         assertEquals(expectedComment, receivedOrder.getComment(), "Комментарий не совпадает");
+        assertEquals(expectedColors, receivedOrder.getColor(), "Цвета не совпадают");
     }
 
     @Test
@@ -75,7 +78,7 @@ public class GetOrderByTrackTest {
     @Test
     @DisplayName("Ошибка (404) получения заказа несуществующим номером (track)")
     public void getOrderWithNonExistingTrackNumberReturnsErrorTest() {
-        random = new Random();
+        Random random = new Random();
         Integer nonExistingTrack = Integer.MAX_VALUE - random.nextInt(100000);
         Response response = orderRestClient.getOrderDetailsByTrackNumber(nonExistingTrack);
         response.then().statusCode(404).body("message", containsString("Заказ не найден"));

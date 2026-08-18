@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.scooter.api.client.CourierRestClient;
 import ru.yandex.practicum.scooter.api.dto.Courier;
 import ru.yandex.practicum.scooter.api.dto.CourierCredentials;
+import ru.yandex.practicum.scooter.api.utils.CourierDataGenerator;
 
 import java.util.Random;
 
@@ -18,19 +19,18 @@ public class LoginCourierApiTest {
     private Courier courier;
     private CourierRestClient courierRestClient;
     private Integer courierId;
-    private Random random;
+    private String unexistentLogin;
+    private String unexistentPassword;
 
     @BeforeEach
     public void courierLoginSetUp() {
         courierRestClient = new CourierRestClient();
-        random = new Random();
-
-        String randomLogin = "sam_bridges_" + random.nextInt(1000);
-        String randomPassword = "cupid_lulu_" + random.nextInt(1000);
-        String randomFirstName = "Сэм " + random.nextInt(1000);
-
-        courier = new Courier(randomLogin, randomPassword, randomFirstName);
+        courier = CourierDataGenerator.generateCourier();
         courierRestClient.createCourier(courier);
+
+        Random random = new Random();
+        unexistentLogin = "dummy_login_" + random.nextInt(100000);
+        unexistentPassword = "dummy_password_" + random.nextInt(10000);
     }
 
     @AfterEach
@@ -38,10 +38,9 @@ public class LoginCourierApiTest {
         if (courierId != null) {
             courierRestClient.deleteCourier(courierId);
         } else {
-            Response loginResponse = courierRestClient.courierLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
-            Integer id = loginResponse.then().extract().path("id");
-            if (id != null) {
-                courierRestClient.deleteCourier(id);
+            Integer courierId = courierRestClient.getCourierIdAfterLogin(new CourierCredentials(courier.getLogin(), courier.getPassword()));
+            if (courierId != null) {
+                courierRestClient.deleteCourier(courierId);
             }
         }
     }
@@ -61,10 +60,7 @@ public class LoginCourierApiTest {
     @DisplayName("Ошибка авторизации (404) по несуществующим паролю и логину")
     public void courierLoginWithUnexistentDataReturnsErrorTest() {
 
-        String randomUnexistentLogin = "unknown_user_" + random.nextInt(1000);
-        String randomUnexistentPassword = "unexistent_password_" + random.nextInt(1000);
-
-        CourierCredentials credentials = new CourierCredentials(randomUnexistentLogin, randomUnexistentPassword);
+        CourierCredentials credentials = new CourierCredentials(unexistentLogin, unexistentPassword);
         Response response = courierRestClient.courierLogin(credentials);
         response.then().statusCode(404).body("message", containsString("Учетная запись не найдена"));
 
@@ -74,9 +70,7 @@ public class LoginCourierApiTest {
     @DisplayName("Ошибка авторизации (404) с некорректным паролем")
     public void courierLoginWithIncorrectPasswordReturnsErrorTest() {
 
-        String randomUnexistentPassword = "unexistent_password_" + random.nextInt(1000);
-
-        CourierCredentials credentials = new CourierCredentials(courier.getLogin(), randomUnexistentPassword);
+        CourierCredentials credentials = new CourierCredentials(courier.getLogin(), unexistentPassword);
         Response response = courierRestClient.courierLogin(credentials);
         response.then().statusCode(404).body("message", containsString("Учетная запись не найдена"));
 
@@ -85,9 +79,8 @@ public class LoginCourierApiTest {
     @Test
     @DisplayName("Ошибка авторизации (404) с некорректным логином")
     public void courierLoginWithIncorrectLoginReturnsErrorTest() {
-        String randomUnexistentLogin = "unexistent_password_" + random.nextInt(1000);
 
-        CourierCredentials credentials = new CourierCredentials(randomUnexistentLogin, courier.getPassword());
+        CourierCredentials credentials = new CourierCredentials(unexistentLogin, courier.getPassword());
         Response response = courierRestClient.courierLogin(credentials);
         response.then().statusCode(404).body("message", containsString("Учетная запись не найдена"));
 

@@ -42,4 +42,12 @@ public class CourierRestClient extends BaseRestClient{
                 .post(COURIER_LOGIN_V1_PATH);
     }
 
+    @Step("Вспомогательный: получение id курьера после логина")
+    public Integer getCourierIdAfterLogin(CourierCredentials credentials) {
+        return courierLogin(credentials)
+                .then()
+                .statusCode(200)
+                .extract().path("id");
+    }
+
 }
