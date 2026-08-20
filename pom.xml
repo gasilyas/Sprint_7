@@ -49,11 +49,6 @@
             <artifactId>allure-junit5</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-rest-assured</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!-- Jackson (Обновлен до безопасной версии 2.18.9) -->
         <dependency>
@@ -99,6 +94,14 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
         </dependency>
     </dependencies>
 

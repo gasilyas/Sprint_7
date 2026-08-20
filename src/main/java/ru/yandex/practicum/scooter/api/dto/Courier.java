@@ -1,14 +1,10 @@
-package ru.yandex.practicum.scooter.api;
+package ru.yandex.practicum.scooter.api.dto;
 
 public class Courier {
     private String login;
     private String password;
     private String firstName;
-
-    public Courier(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
+    private Integer id;
 
     public Courier(String login, String password, String firstName) {
         this.login = login;
@@ -37,5 +33,11 @@ public class Courier {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

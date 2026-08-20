@@ -1,39 +1,16 @@
+# Временная папка сборщика Maven (туда складываются allure-results)
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# Папки и файлы настроек среды разработки IntelliJ IDEA
+.idea/
+.allure/
 *.iml
-*.ipr
+*.iws
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Локальные отчёты Allure, если вы генерировали их через Allure CLI
+allure-report/
+allure-results/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
+# Системные файлы операционных систем
 .DS_Store
+Thumbs.db

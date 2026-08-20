@@ -1,0 +1,18 @@
+package ru.yandex.practicum.scooter.api.client;
+
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+
+public class BaseRestClient {
+    protected static final String BASE_URL = "https://qa-scooter.praktikum-services.ru";
+
+    protected RequestSpecification getBaseSpecification() {
+        return new RequestSpecBuilder()
+                .setBaseUri(BASE_URL)
+                .setContentType(ContentType.JSON)
+                .addFilter(new AllureRestAssured())
+                .build();
+    }
+}
